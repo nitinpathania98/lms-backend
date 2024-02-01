@@ -70,8 +70,6 @@ const login = async (req, res) => {
                 let token = jwt.sign({ id: user.id, email: user.email, userName: user.userName }, process.env.secretKey, {
                     expiresIn: '1h',
                 });
-                res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true });
-                console.log("token is", token);
                 //send user data
                 return res.status(200).send({
                     id: user.id,

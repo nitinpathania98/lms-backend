@@ -16,7 +16,8 @@ db.sequelize = sequelize
 
 //connecting to model
 db.users = require('./userModel')(sequelize, DataTypes)
-db.leaveSubmit = require('./leaveModel')(sequelize, DataTypes)
+db.leaves = require('./leaveModel')(sequelize, DataTypes)
+db.leaveTypes = require('./leaveTypesModel')(sequelize, DataTypes)
 
 //exporting the module
 module.exports = db

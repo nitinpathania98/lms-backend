@@ -17,7 +17,7 @@ const signup = async (req, res) => {
         //saving the user
         const user = await User.create(data);
         if (user) {
-            return res.status(201).send(user);
+            return res.status(201).send(data);
         } else {
             return res.status(409).send("Details are not correct");
         }

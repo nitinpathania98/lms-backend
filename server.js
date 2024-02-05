@@ -6,8 +6,10 @@ const sequelize = require('sequelize')
 const dotenv = require('dotenv').config()
 const cookieParser = require('cookie-parser')
 const db = require('./Models')
-const userRoutes = require ('./Routes/userRoutes')
-const leaveSubmitRoutes= require('./Routes/leaveSubmitRoutes')
+const userRoutes = require('./Routes/userRoutes')
+const leaveRoutes = require('./Routes/leaveRoutes');
+const leaveTypesRoutes = require('./Routes/leaveTypesRoutes');
+
 //setting up your port
 const PORT = process.env.PORT || 8080
 
@@ -27,7 +29,11 @@ app.use(cors({
 
 //routes for the user API
 app.use('/api/users', userRoutes)
-app.use('/api/leaveRequest',leaveSubmitRoutes)
+app.use('/api/leave', leaveRoutes);
+app.use('/api', leaveTypesRoutes);
 
-//listening to server connection
-app.listen(PORT, () => console.log(`Server is connected on ${PORT}`))
+db.sequelize.sync().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+});

@@ -2,7 +2,7 @@ const express = require("express");
 const db = require("../Models");
 const jwt = require("jsonwebtoken");
 
-const User = db.users;
+const User = db.User;
 const saveUser = async (req, res, next) => {
     try {
         const username = await User.findOne({

@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const { sequelize } = require('../Models/index');
 
 // Assigning users to the variable User
-const Profile = db.Profile;
 const User = db.User;
 
 const signup = async (req, res) => {

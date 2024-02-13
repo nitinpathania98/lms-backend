@@ -28,6 +28,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true
         },
-    }, { timestamps: true },)
-    return Profile
-}
+    }, { timestamps: true });
+    return Profile;
+};

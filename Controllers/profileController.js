@@ -7,23 +7,23 @@ const Profile = db.Profile;
 // Create profile
 const createProfile = async (req, res) => {
     try {
-        const { designation, department, phoneNumber, country, state, city, address } = req.body;
-        const data = {
+        const { userId, designation, department, phoneNumber, country, state, city, address } = req.body;
+
+        const profileData = {
+            userId, // Set userId to the ID of the corresponding user
             designation,
             department,
             phoneNumber,
             country,
             state,
             city,
-            address,
+            address
         };
-        // Saving the profile
-        const profile = await Profile.create(data);
-        if (profile) {
-            return res.status(201).send(data);
-        } else {
-            return res.status(409).send("Details are not correct");
-        }
+
+        // Save the profile data
+        const profile = await Profile.create(profileData);
+
+        return res.status(201).send(profile);
     } catch (error) {
         console.log(error);
         return res.status(500).send("Internal Server Error");

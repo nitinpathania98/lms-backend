@@ -53,7 +53,7 @@ const getUserDetails = async (req, res) => {
         });
 
         // Merge additional details with existing user details
-        const mergedDetails = { ...userWithDetails.toJSON(), additionalDetails };
+        const mergedDetails = { ...userWithDetails.toJSON(), ...additionalDetails[0]};
 
         return res.status(200).send(mergedDetails);
     } catch (error) {
@@ -61,6 +61,9 @@ const getUserDetails = async (req, res) => {
         return res.status(500).send("Internal Server Error");
     }
 };
+
+
+
 
 // Get all users
 const getAllUsers = async (req, res) => {

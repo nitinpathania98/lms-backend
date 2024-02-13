@@ -2,7 +2,7 @@ const express = require("express");
 const db = require("../Models");
 const jwt = require("jsonwebtoken");
 
-const User = db.users;
+const User = db.User;
 const saveUser = async (req, res, next) => {
     try {
         const username = await User.findOne({
@@ -29,16 +29,12 @@ const saveUser = async (req, res, next) => {
 
 const authenticateToken = (req, res, next) => {
     const token = req.headers.authorization;
-    console.log(req)
-    console.log("token..", token)
     if (!token) {
         return res.status(401).json({ error: "Token not provided" });
     }
 
     try {
         const decodedToken = jwt.verify(token.split(' ')[1], process.env.secretKey);
-        console.log("Secret Key:", process.env.secretKey);
-        console.log("Decoded Token:", decodedToken);
         req.user = decodedToken;
         next();
     } catch (error) {

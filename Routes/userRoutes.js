@@ -13,6 +13,9 @@ router.get("/users", userController.getAllUsers);
 
 router.get('/user/details', userAuth.authenticateToken, userController.getUserDetails);
 
+// Update user details
+router.put('/user/update', userAuth.authenticateToken, userController.updateUserDetails);
+
 //login route
 router.post('/login', login)
 

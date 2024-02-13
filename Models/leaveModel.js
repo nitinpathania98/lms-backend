@@ -1,21 +1,29 @@
+
 module.exports = (sequelize, DataTypes) => {
-    const LeaveSubmit = sequelize.define("leaveSubmit", {
+    const Leave = sequelize.define("LeaveRequest", {
         leaveType: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            required: true
+        },
+        startDate: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            required: true
         },
         purpose: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            required: true
         },
         duration: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            required: true
         },
     }, {
-        primaryKey: false,
-        timestamps: true
-    },
-    );
-    return LeaveSubmit
+        timestamps: true,
+    });
+
+    return Leave;
 };

@@ -45,16 +45,16 @@ const getUserDetails = async (req, res) => {
         // Custom SQL query to fetch additional user details
         const additionalDetails = await sequelize.query(`
             SELECT * FROM public."Users" u
-            JOIN public."Profiles" p ON u.id = p."id" WHERE u.id = :userId;
+            JOIN public."Profiles" p ON u.id = p."UserId" WHERE u.id = :userId;
         `, {
             replacements: { userId: UserId },
             type: sequelize.QueryTypes.SELECT
         });
 
         // Merge additional details with existing user details
-        const mergedDetails = { ...userWithDetails.toJSON(), ...additionalDetails[0]};
+        const mergedDetails = { ...userWithDetails.toJSON(), ...additionalDetails[0] };
 
-        return res.status(200).send(mergedDetails);
+        return res.status(200).send([mergedDetails]);
     } catch (error) {
         console.log(error);
         return res.status(500).send("Internal Server Error");

@@ -2,11 +2,12 @@
 const express = require('express');
 const profileController = require('../Controllers/profileController');
 const { createProfile, getProfileDetails, updateProfile, deleteProfile } = profileController;
+const userAuth = require('../Middlewares/userAuth');
 
 const router = express.Router();
 
 // Create Profile Route
-router.post('/user', createProfile);
+router.post('/user', userAuth.authenticateToken, createProfile);
 
 // Get Profile Details Route
 router.get('/user', getProfileDetails);

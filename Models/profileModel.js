@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true
         },
+        UserId: {
+            type: DataTypes.INTEGER,
+        }
     }, { timestamps: true });
     return Profile;
 };

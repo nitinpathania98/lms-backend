@@ -7,10 +7,20 @@ const Profile = db.Profile;
 // Create profile
 const createProfile = async (req, res) => {
     try {
-        const { userId, designation, department, phoneNumber, country, state, city, address } = req.body;
+        // Get UserId from the logged-in user
+        const userId = req.user.id;
+
+        // Check if the user already has a profile
+        const existingProfile = await Profile.findOne({ where: { UserId: userId } });
+        if (existingProfile) {
+            return res.status(400).send("User already has a profile");
+        }
+
+        // If the user doesn't have a profile, proceed with creating one
+        const { designation, department, phoneNumber, country, state, city, address } = req.body;
 
         const profileData = {
-            userId, // Set userId to the ID of the corresponding user
+            UserId: userId,
             designation,
             department,
             phoneNumber,
@@ -29,6 +39,7 @@ const createProfile = async (req, res) => {
         return res.status(500).send("Internal Server Error");
     }
 };
+
 
 // Get all profiles
 const getProfileDetails = async (req, res) => {

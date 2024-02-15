@@ -1,22 +1,15 @@
-//importing modules
-const express = require('express')
-const userController = require('../Controllers/userController')
-const { signup, login } = userController
-const userAuth = require('../Middlewares/userAuth')
+const express = require('express');
+const router = express.Router();
+const userController = require('../Controllers/userController');
+const userAuth = require('../Middlewares/userAuth');
 
-const router = express.Router()
+const { signup, login, getAllUsers, getUserDetails, updateUserDetails } = userController;
+const { saveUser, authenticateToken } = userAuth;
 
-router.post('/signup', userAuth.saveUser, signup)
+router.post('/signup', saveUser, signup);
+router.post('/login', login);
+router.get('/users', getAllUsers);
+router.get('/user/details', authenticateToken, getUserDetails);
+router.put('/user/update', authenticateToken, updateUserDetails);
 
-// Get all user details 
-router.get("/users", userController.getAllUsers);
-
-router.get('/user/details', userAuth.authenticateToken, userController.getUserDetails);
-
-// Update user details
-router.put('/user/update', userAuth.authenticateToken, userController.updateUserDetails);
-
-//login route
-router.post('/login', login)
-
-module.exports = router
+module.exports = router;

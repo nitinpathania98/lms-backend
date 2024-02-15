@@ -1,21 +1,11 @@
-// Importing modules
 const express = require('express');
+const router = express.Router();
 const profileController = require('../Controllers/profileController');
-const { createProfile, getProfileDetails, updateProfile, deleteProfile } = profileController;
 const userAuth = require('../Middlewares/userAuth');
 
-const router = express.Router();
-
-// Create Profile Route
-router.post('/user', userAuth.authenticateToken, createProfile);
-
-// Get Profile Details Route
-router.get('/user', getProfileDetails);
-
-// Update Profile Route
-router.put('/user/:id', updateProfile);
-
-// Delete Profile Route
-router.delete('/user/:id', deleteProfile);
+router.post('/user', userAuth.authenticateToken, profileController.createProfile);
+router.get('/user', profileController.getProfileDetails);
+router.put('/user/:id', profileController.updateProfile);
+router.delete('/user/:id', profileController.deleteProfile);
 
 module.exports = router;

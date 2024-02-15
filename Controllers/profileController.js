@@ -1,10 +1,5 @@
-// Importing modules
-const db = require("../Models");
+const Profile = require("../Models").Profile;
 
-// Assigning Profile to the variable Profile
-const Profile = db.Profile;
-
-// Create profile
 const createProfile = async (req, res) => {
     try {
         // Get UserId from the logged-in user
@@ -40,63 +35,40 @@ const createProfile = async (req, res) => {
     }
 };
 
-
-// Get all profiles
 const getProfileDetails = async (req, res) => {
     try {
         const profiles = await Profile.findAll();
         return res.status(200).send(profiles);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).send("Internal Server Error");
     }
 };
 
-// Update profile
 const updateProfile = async (req, res) => {
     try {
         const profileId = req.params.id;
-        const { designation, department, phoneNumber, country, state, city, address } = req.body;
-        const data = {
-            designation,
-            department,
-            phoneNumber,
-            country,
-            state,
-            city,
-            address,
-        };
         const profile = await Profile.findByPk(profileId);
-        if (!profile) {
-            return res.status(404).send("profile not found");
-        }
-        await Profile.update(data, { where: { id: profileId } });
-        return res.status(200).send("profile updated successfully");
+        if (!profile) return res.status(404).send("Profile not found");
+        await Profile.update(req.body, { where: { id: profileId } });
+        return res.status(200).send("Profile updated successfully");
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).send("Internal Server Error");
     }
 };
 
-// Delete profile
 const deleteProfile = async (req, res) => {
     try {
         const profileId = req.params.id;
         const profile = await Profile.findByPk(profileId);
-        if (!profile) {
-            return res.status(404).send("profile not found");
-        }
+        if (!profile) return res.status(404).send("Profile not found");
         await Profile.destroy({ where: { id: profileId } });
-        return res.status(200).send("profile deleted successfully");
+        return res.status(200).send("Profile deleted successfully");
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).send("Internal Server Error");
     }
 };
 
-module.exports = {
-    createProfile,
-    getProfileDetails,
-    updateProfile,
-    deleteProfile
-};
+module.exports = { createProfile, getProfileDetails, updateProfile, deleteProfile };

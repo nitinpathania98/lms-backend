@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-    const Leave = sequelize.define("LeaveRequest", {
+    const Leave = sequelize.define("Leave", {
         leaveType: {
             type: DataTypes.STRING,
             allowNull: false,

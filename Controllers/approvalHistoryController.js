@@ -13,7 +13,7 @@ const approvalHistoryController = {
             });
 
             // Update the status of the leave request to "approved"
-            await LeaveRequestController.updateLeaveRequestStatus(leave_request_id);
+            await LeaveRequestController.updateLeaveRequestStatus(approvalHistory.id);
 
             return res.status(201).json(approvalHistory);
         } catch (error) {

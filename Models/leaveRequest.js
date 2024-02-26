@@ -1,24 +1,19 @@
 module.exports = (sequelize, DataTypes) => {
     const LeaveRequest = sequelize.define("LeaveRequest", {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        employee_id: {
+        UserId: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        leave_type: {
+        leaveType: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        start_date: {
-            type: DataTypes.DATE,
+        startDate: {
+            type: DataTypes.STRING,
             allowNull: false
         },
-        end_date: {
-            type: DataTypes.DATE,
+        endDate: {
+            type: DataTypes.STRING,
             allowNull: false
         },
         reason: {

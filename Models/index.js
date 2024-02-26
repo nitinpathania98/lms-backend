@@ -25,14 +25,14 @@ db.notificationLog= require('./notificationLogModel')(sequelize, DataTypes);
 
 // Define associations
 db.User.hasOne(Profile, { foreignKey: 'UserId', as: 'Profile' });
-db.User.hasMany(db.leaveRequest, { foreignKey: 'employee_id', as: 'LeaveRequests' });
+db.User.hasMany(db.leaveRequest, { foreignKey: 'UserId', as: 'LeaveRequests' });
 db.Profile.belongsTo(User, { foreignKey: 'UserId' });
 
 db.approvalHistory.belongsTo(db.leaveRequest, { foreignKey: 'leave_request_id', onDelete: 'CASCADE' });
 db.approvalHistory.belongsTo(db.User, { foreignKey: 'approver_id', onDelete: 'CASCADE' });
 
 // Additional association for LeaveRequest
-db.leaveRequest.belongsTo(db.User, { foreignKey: 'employee_id', onDelete: 'CASCADE' });
+db.leaveRequest.belongsTo(db.User, { foreignKey: 'UserId', onDelete: 'CASCADE' });
 
 
 //exporting the module

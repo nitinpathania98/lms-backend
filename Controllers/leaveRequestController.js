@@ -3,12 +3,12 @@ const db = require("../Models");
 const LeaveRequestController = {
   createLeaveRequest: async (req, res) => {
     try {
-      const { employee_id, leave_type, start_date, end_date, reason } = req.body;
+      const { UserId, leaveType, startDate, endDate, reason } = req.body;
       const leaveRequest = await db.leaveRequest.create({
-        employee_id,
-        leave_type,
-        start_date,
-        end_date,
+        UserId,
+        leaveType,
+        startDate,
+        endDate,
         reason
       });
       return res.status(201).json(leaveRequest);
@@ -46,16 +46,16 @@ const LeaveRequestController = {
   updateLeaveRequest: async (req, res) => {
     try {
       const leaveRequestId = req.params.id;
-      const { employee_id, leave_type, start_date, end_date, reason, status } = req.body;
+      const { UserId, leaveType, startDate, endDate, reason, status } = req.body;
       const leaveRequest = await db.leaveRequest.findByPk(leaveRequestId);
       if (!leaveRequest) {
         return res.status(404).json({ error: "Leave request not found" });
       }
       await leaveRequest.update({
-        employee_id,
-        leave_type,
-        start_date,
-        end_date,
+        UserId,
+        leaveType,
+        startDate,
+        endDate,
         reason,
         status
       });
@@ -90,21 +90,30 @@ const LeaveRequestController = {
         return;
       }
 
-      // Update the status of the associated leave request
+      // Update the status of the associated leave request based on the response
       const leaveRequest = approvalHistory.LeaveRequest;
       if (!leaveRequest) {
         console.error('Associated leave request not found');
         return;
       }
 
-      // Update the status to 'approved'
-      await leaveRequest.update({ status: 'approved' });
+      // Determine the status based on the response
+      let status = 'pending'; // Default status if response is neither 'approved' nor 'rejected'
+      if (approvalHistory.response === 'approved') {
+        status = 'approved';
+      } else if (approvalHistory.response === 'rejected') {
+        status = 'rejected';
+      }
+
+      // Update the status
+      await leaveRequest.update({ status });
 
       console.log('Leave request status updated successfully');
     } catch (error) {
       console.error('Error updating leave request status:', error);
     }
   }
+
 
 };
 

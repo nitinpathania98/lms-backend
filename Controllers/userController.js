@@ -26,7 +26,12 @@ const getUserDetails = async (req, res) => {
             SELECT * FROM public."Users" u
             JOIN public."Profiles" p ON u.id = p."UserId" WHERE u.id = :userId;
         `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
-        const mergedDetails = { ...userWithDetails.toJSON(), ...additionalDetails[0] };
+        const leaveRequestDetails = await sequelize.query(`
+        SELECT * FROM public."Users" u
+        JOIN public."LeaveRequests" l ON u.id = l."UserId" WHERE u.id = :userId;
+    `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
+        console.log("lr",leaveRequestDetails)
+        const mergedDetails = { ...userWithDetails.toJSON(), ...additionalDetails[0], ...leaveRequestDetails[0] };
         return res.status(200).send([mergedDetails]);
     } catch (error) {
         console.error(error);

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const NotificationLog = sequelize.define("NotificationLog", {
-        recipient_email: {
+        recipient_UserId: {
             type: DataTypes.STRING,
             allowNull: false
         },

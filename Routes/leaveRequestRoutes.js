@@ -11,4 +11,10 @@ router.get('/leave-requests', leaveRequestController.getAllLeaveRequests);
 // Route to get a leave request by ID
 router.get('/leave-request/:id', leaveRequestController.getLeaveRequestById);
 
+// Route to update a leave request by ID
+router.put('/leave-request/:id', leaveRequestController.updateLeaveRequest);
+
+// Route to delete a leave request by ID
+router.delete('/leave-request/:id', leaveRequestController.deleteLeaveRequest);
+
 module.exports = router;

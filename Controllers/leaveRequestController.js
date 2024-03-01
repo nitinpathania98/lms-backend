@@ -108,11 +108,19 @@ const LeaveRequestController = {
       // Update the status
       await leaveRequest.update({ status });
 
+      // Create a notification log entry
+      // const notificationLog = await db.notificationLog.create({
+      //   recipient_UserId: leaveRequest.UserId, // Assuming UserId corresponds to the email of the user
+      //   notification_type: 'status_update',
+      //   message_content: `Leave request ${leaveRequest.id} has been ${status}.`,
+      // });
+
       console.log('Leave request status updated successfully');
     } catch (error) {
       console.error('Error updating leave request status:', error);
     }
   }
+
 
 
 };

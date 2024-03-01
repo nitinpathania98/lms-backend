@@ -13,6 +13,23 @@ const notificationLogRoutes = require('./Routes/notificationLogRoutes');
 
 const PORT = process.env.PORT || 8080;
 const app = express();
+const http = require('http');
+const socketIO = require('socket.io');
+const approvalHistoryController = require('./Controllers/approvalHistoryController');
+const server = http.createServer(app);
+const io = socketIO(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+    }
+});
+approvalHistoryController.setIo(io);
+
+app.get('/send-message', (req, res) => {
+    io.emit('message', req.query.message);
+    res.send('Message sent');
+    console.log('Receive message', req.query.message);
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,9 +45,8 @@ app.use('/api', leaveRequestRoutes);
 app.use('/api', approvalTableRoutes);
 app.use('/api', notificationLogRoutes);
 
-
 db.sequelize.sync().then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
 });

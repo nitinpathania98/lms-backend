@@ -21,7 +21,7 @@ db.leavetypes = require('./leaveTypesModel')(sequelize, DataTypes)
 Profile = db.Profile = require('./profileModel')(sequelize, DataTypes)
 db.approvalHistory = require('./approvalHistory')(sequelize, DataTypes)
 db.leaveRequest = require('./leaveRequest')(sequelize, DataTypes)
-db.notificationLog= require('./notificationLogModel')(sequelize, DataTypes);
+db.notificationLog = require('./notificationLogModel')(sequelize, DataTypes);
 
 // Define associations
 db.User.hasOne(Profile, { foreignKey: 'UserId', as: 'Profile' });

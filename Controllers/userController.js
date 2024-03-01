@@ -20,24 +20,46 @@ const signup = async (req, res) => {
 const getUserDetails = async (req, res) => {
     try {
         const UserId = req.user.id;
+
+        // Fetch user details
         const userWithDetails = await User.findOne({ where: { id: UserId } });
         if (!userWithDetails) return res.status(404).send("User not found");
+
+        // Fetch additional details
         const additionalDetails = await sequelize.query(`
             SELECT * FROM public."Users" u
             JOIN public."Profiles" p ON u.id = p."UserId" WHERE u.id = :userId;
         `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
+
+        // Fetch leave request details
         const leaveRequestDetails = await sequelize.query(`
-        SELECT * FROM public."Users" u
-        JOIN public."LeaveRequests" l ON u.id = l."UserId" WHERE u.id = :userId;
-    `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
-        console.log("lr",leaveRequestDetails)
-        const mergedDetails = { ...userWithDetails.toJSON(), ...additionalDetails[0], ...leaveRequestDetails[0] };
+            SELECT * FROM public."Users" u
+            JOIN public."LeaveRequests" l ON u.id = l."UserId" WHERE u.id = :userId;
+        `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
+
+        // Fetch notification details
+        const notificationLogs = await db.notificationLog.findAll({
+            where: {
+                recipient_UserId: { [db.Sequelize.Op.eq]: UserId.toString() }
+            }
+        });
+        console.log(notificationLogs)
+        // Merge all details
+        const mergedDetails = {
+            ...userWithDetails.toJSON(),
+            ...additionalDetails[0],
+            leaveRequests: leaveRequestDetails,
+            notifications: notificationLogs
+        };
+        console.log(mergedDetails)
         return res.status(200).send([mergedDetails]);
+
     } catch (error) {
         console.error(error);
         return res.status(500).send("Internal Server Error");
     }
 };
+
 
 const getAllUsers = async (req, res) => {
     try {

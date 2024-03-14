@@ -3,11 +3,13 @@ const db = require("../Models");
 const notificationLogController = {
     createNotificationLog: async (req, res) => {
         try {
-            const { recipient_UserId, notification_type, message_content } = req.body;
+            const { recipient_UserId, notification_type, message_content ,approver_id,UserId} = req.body;
             const notificationLog = await db.notificationLog.create({
+                approver_id,
                 recipient_UserId,
                 notification_type,
-                message_content
+                message_content,
+                UserId
             });
             return res.status(201).json(notificationLog);
         } catch (error) {
@@ -49,6 +51,7 @@ const notificationLogController = {
                 return res.status(404).json({ error: 'Notification log entry not found' });
             }
             notificationLog = await notificationLog.update({
+                approver_id,
                 recipient_UserId,
                 notification_type,
                 message_content

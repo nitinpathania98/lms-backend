@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const User = db.User;
 
+const CreateUser = db.CreateUser;
 const saveUser = async (req, res, next) => {
     try {
         const { userName, email } = req.body;
@@ -11,6 +12,20 @@ const saveUser = async (req, res, next) => {
         if (existingUsername) return res.status(409).send("Username already taken");
 
         const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) return res.status(409).send("Email already exists");
+
+        next();
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error");
+    }
+};
+
+const saveEmployee = async (req, res, next) => {
+    try {
+        const {  email } = req.body;
+
+        const existingEmail = await CreateUser.findOne({ where: { email } });
         if (existingEmail) return res.status(409).send("Email already exists");
 
         next();
@@ -39,4 +54,4 @@ const authenticateToken = (req, res, next) => {
     }
 };
 
-module.exports = { saveUser, authenticateToken };
+module.exports = { saveUser,saveEmployee, authenticateToken };

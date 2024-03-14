@@ -38,12 +38,11 @@ const getUserDetails = async (req, res) => {
         `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
 
         // Fetch notification details
-        const notificationLogs = await db.notificationLog.findAll({
-            where: {
-                recipient_UserId: { [db.Sequelize.Op.eq]: UserId.toString() }
-            }
-        });
-        console.log(notificationLogs)
+        const notificationLogs = await sequelize.query(`
+            SELECT * FROM public."Users" u
+            JOIN public."NotificationLogs" n ON u.id = n."recipient_UserId" WHERE u.id = :userId;
+        `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
+
         // Merge all details
         const mergedDetails = {
             ...userWithDetails.toJSON(),
@@ -51,7 +50,6 @@ const getUserDetails = async (req, res) => {
             leaveRequests: leaveRequestDetails,
             notifications: notificationLogs
         };
-        console.log(mergedDetails)
         return res.status(200).send([mergedDetails]);
 
     } catch (error) {
@@ -99,7 +97,7 @@ const login = async (req, res) => {
         if (!user || !(await bcrypt.compare(password, user.password))) return res.status(401).send("Authentication failed");
         const accessToken = jwt.sign({ id: user.id, email: user.email, userName: user.userName }, process.env.secretKey, { expiresIn: '1h' });
         const refreshToken = jwt.sign({ id: user.id, email: user.email, userName: user.userName }, process.env.refreshTokenSecret);
-        return res.status(200).send({ id: user.id, userName: user.userName, email: user.email, accessToken, refreshToken });
+        return res.status(200).send({ id: user.id, userName: user.userName, email: user.email, accessToken, refreshToken, UserId: user.id });
     } catch (error) {
         console.error(error);
         return res.status(500).send("Internal Server Error");

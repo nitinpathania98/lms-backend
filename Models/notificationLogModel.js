@@ -1,7 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
     const NotificationLog = sequelize.define("NotificationLog", {
         recipient_UserId: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        approver_id: {
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         notification_type: {

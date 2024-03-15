@@ -25,39 +25,9 @@ const UserController = {
         password: hashedPassword,
       });
       // Send email with user details
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: "nitinsingh2111998@gmail.com",
-          pass: "qkybgjzsudeflfqy",
-        },
-      });
+     
 
-      const mailOptions = {
-        from: "nitinsingh2111998@gmail.com",
-        to: email,
-        subject: "Invitation to the Application",
-        html: `
-              <p>Hello ${name},</p>
-              <p>Welcome to the Application!</p>
-              <p>Your account has been created successfully.</p>
-              <p>Email: ${email}</p>
-              <p>Password: ${password}</p>
-              <p>Please click <a href="http://localhost:3000/login">here</a> to log in.</p>
-            `,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error("Error sending email:", error);
-        } else {
-          console.log("Email sent:", info.response);
-        }
-      });
-
+     
       return res.status(201).json(user);
     } catch (error) {
       console.error(error);

@@ -10,6 +10,8 @@ const profileRoutes = require('./Routes/profileRoutes');
 const leaveRequestRoutes = require('./Routes/leaveRequestRoutes');
 const approvalTableRoutes = require('./Routes/approvalTableRoutes');
 const notificationLogRoutes = require('./Routes/notificationLogRoutes');
+const createUserRoutes = require('./Routes/createUserRoutes');
+const attendanceRoutes = require('./Routes/attendanceRoutes');
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -23,6 +25,28 @@ const io = socketIO(server, {
         methods: ['GET', 'POST']
     }
 });
+const connectedUsers = {};
+
+io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+
+    // Store user ID and socket ID upon connection
+    connectedUsers[socket.userId] = socket.id;
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+
+        // Remove user ID and socket ID upon disconnection
+        delete connectedUsers[socket.userId];
+    });
+});
+
+
+function getRecipientSocketId(userId) {
+    return connectedUsers[userId];
+}
+const SocketId = getRecipientSocketId()
+
 approvalHistoryController.setIo(io);
 
 app.get('/send-message', (req, res) => {
@@ -44,6 +68,8 @@ app.use('/api/profile', profileRoutes);
 app.use('/api', leaveRequestRoutes);
 app.use('/api', approvalTableRoutes);
 app.use('/api', notificationLogRoutes);
+app.use('/api/employee', createUserRoutes);
+app.use('/api/employee', attendanceRoutes);
 
 db.sequelize.sync().then(() => {
     server.listen(PORT, () => {

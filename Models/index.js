@@ -22,17 +22,22 @@ Profile = db.Profile = require('./profileModel')(sequelize, DataTypes)
 db.approvalHistory = require('./approvalHistory')(sequelize, DataTypes)
 db.leaveRequest = require('./leaveRequest')(sequelize, DataTypes)
 db.notificationLog = require('./notificationLogModel')(sequelize, DataTypes);
+db.CreateUser = require('./createUserModel')(sequelize, DataTypes);
+db.Attendance = require('./attendanceModel')(sequelize, DataTypes);
 
 // Define associations
 db.User.hasOne(Profile, { foreignKey: 'UserId', as: 'Profile' });
 db.User.hasMany(db.leaveRequest, { foreignKey: 'UserId', as: 'LeaveRequests' });
 db.Profile.belongsTo(User, { foreignKey: 'UserId' });
+db.CreateUser.hasOne(db.Attendance, { foreignKey: 'UserId', as: 'Attendance' });
+
 
 db.approvalHistory.belongsTo(db.leaveRequest, { foreignKey: 'leave_request_id', onDelete: 'CASCADE' });
 db.approvalHistory.belongsTo(db.User, { foreignKey: 'approver_id', onDelete: 'CASCADE' });
 
 // Additional association for LeaveRequest
 db.leaveRequest.belongsTo(db.User, { foreignKey: 'UserId', onDelete: 'CASCADE' });
+db.Attendance.belongsTo(db.CreateUser, { foreignKey: 'UserId', onDelete: 'CASCADE' });
 
 
 //exporting the module
